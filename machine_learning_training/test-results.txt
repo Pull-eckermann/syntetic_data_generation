@@ -1,0 +1,83 @@
+============================================================
+***syntetic-set-1.csv 
+
+Min parameter: 0
+max_elem parameter: 10625
+
+Result with Real images (Test directory) and k = 3
+- Predictor accuracy:  0.5477359519912711
+
+Result with Real images (Test directory) and k = 9
+- Predictor accuracy:  0.5488472651593219
+
+Result with sintetic images (Train3 directory) and k = 3
+- Predictor accuracy:  0.7110322580645161
+
+Result with sintetic images (Train3 directory) and k = 9
+- Predictor accuracy:  0.7295483870967742
+
+============================================================
+***syntetic-set-2.csv 
+
+Min parameter: 0
+max_elem parameter: 6043
+
+Result with Real images (Test directory) and k = 3
+- Predictor accuracy:  0.5880261057566022
+
+Result with Real images (Test directory) and k = 9
+- Predictor accuracy:  0.5948152189286942
+
+Result with sintetic images (Train2 directory) and k = 3
+- Predictor accuracy:  0.7067833698030634
+
+Result with sintetic images (Train2 directory) and k = 9
+- Predictor accuracy:  0.7011566114410753
+
+============================================================
+***syntetic-set-1-2.csv 
+
+Min parameter: 0
+max_elem parameter: 10625
+
+Result with UFPR04 and k = 3
+- Predictor accuracy:  0.589080052530635
+
+Result with UFPR04 and k = 9
+- Predictor accuracy:  0.5942669803388037
+
+Result with UFPR05 and k = 3
+- Predictor accuracy:  0.4806828120758814
+
+Result with UFPR05 and k = 9
+- Predictor accuracy:  0.5350845975208854
+
+Result with PUC and k = 3
+- Predictor accuracy:  0.6791475238259124
+
+Result with PUC and k = 9
+- Predictor accuracy:  0.6681839504223015
+
+============================================================
+***syntetic-set-3.csv
+
+Min parameter: 0
+max_elem parameter: 6034
+
+Result with UFPR04 and k = 3
+- Predictor accuracy: 0.5879746416862712
+
+Result with UFPR04 and k = 9
+- Predictor accuracy: 0.6038755515244277
+
+Result with UFPR05 and k = 3
+- Predictor accuracy: 0.5252706819072895
+
+Result with UFPR05 and k = 9
+- Predictor accuracy: 0.5506710498537262
+
+Result with PUC and k = 3
+- Predictor accuracy: 0.6378225603043682
+
+Result with PUC and k = 9
+- Predictor accuracy: 0.636302133547686

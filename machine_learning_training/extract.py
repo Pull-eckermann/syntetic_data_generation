@@ -8,18 +8,18 @@ from matplotlib import pyplot as plt
 
 # Certifies that the paths was passed in command the line
 if len(sys.argv) < 3:
-    print("Please, provide the path to PKLot Dataset and name for extracted features")
+    print("Please, provide the path to Train Dataset and name for extracted features")
     exit(0)
 
 #contruct object to extract the features
 desc = LocalBinaryPatterns(8, 1)
 
 shown = False
-#Walks througt PKLot directory
+#Walks througt Tain set directory
 Lots = os.walk(sys.argv[1])
 for path, _, files in Lots:
     for img in files:
-        if  img.endswith('.jpg'):
+        if img.endswith('.jpeg'):
             image = path + '/' + img #Path to the Parking Lot image
             image = cv2.imread(image)
             image_grey = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)

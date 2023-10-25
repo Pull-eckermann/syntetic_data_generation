@@ -27,7 +27,7 @@ except IndexError as error:
 try:
     with open(sys.argv[1], 'r+', newline='') as file:
         reader = csv.reader(file)    
-        with open('nomalized_'+sys.argv[1], 'a', newline='') as filewriter:
+        with open('normalized_'+sys.argv[1], 'a', newline='') as filewriter:
             writer = csv.writer(filewriter)
             for row in reader:
                 tag = row.pop()
