@@ -7,7 +7,7 @@ import tensorflow_hub as hub
 import datetime
 
 # ================================Prepare dataset to retrain================================
-data_root = '/home/venkopad/faculdade/syntetic_data_generation/transfer_learning_classification/syntetic-data/Train'
+data_root = './syntetic-data/Train'
 #validation_data = '/home/venkopad/faculdade/syntetic_data_generation/transfer_learning_classification/real-data/Test'
 
 batch_size = 16
@@ -18,7 +18,7 @@ img_width = 224
 # tf.keras.utils.image_dataset_from_directory, which will generate a tf.data.Dataset:
 train_ds = tf.keras.utils.image_dataset_from_directory(
   str(data_root),
-  validation_split=0.2,
+  validation_split=0.7,
   subset="training",
   seed=123,
   image_size=(img_height, img_width),

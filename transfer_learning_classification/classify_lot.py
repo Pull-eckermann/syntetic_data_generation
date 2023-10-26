@@ -36,7 +36,7 @@ test_ds = test_ds.map(lambda x, y: (normalization_layer(x), y)) # Where x—imag
 
 scores = []
 for image_batch, true_id in test_ds:
-    predicted_batch = model.predict(image_batch, verbose = 0)
+    predicted_batch = model.predict(image_batch)
     predicted_id = tf.math.argmax(predicted_batch, axis=-1)
     predicted_labels = class_names[predicted_id]
     labels = class_names[true_id]
