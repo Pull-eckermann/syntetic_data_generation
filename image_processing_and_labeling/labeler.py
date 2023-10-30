@@ -22,6 +22,7 @@ def crop_minAreaRect(img, rect):
     img_crop = cv2.getRectSubPix(img_rot, size, center)
     return img_crop
 
+# Reads the image containing the individual parking space
 pk_space = cv2.imread('./'+sys.argv[1])
 pk_space = cv2.cvtColor(pk_space, cv2.COLOR_BGR2GRAY)
 image = cv2.imread('./cars.jpeg')
