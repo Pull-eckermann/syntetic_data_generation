@@ -22,27 +22,39 @@ def crop_minAreaRect(img, rect):
     img_crop = cv2.getRectSubPix(img_rot, size, center)
     return img_crop
 
-# Reads the image containing the individual parking space
-pk_space = cv2.imread('./'+sys.argv[1])
-pk_space = cv2.cvtColor(pk_space, cv2.COLOR_BGR2GRAY)
-image = cv2.imread('./cars.jpeg')
-labels = cv2.imread('./labels.jpeg')
-labels = cv2.cvtColor(labels, cv2.COLOR_BGR2RGB)
+try:
+    lots = os.walk(sys.argv[1])
+except:
+    print("Error: Please specify the patth to the parking lot directory")
+    exit(1)
 
-_, bin_img = cv2.threshold(pk_space,0,255,cv2.THRESH_BINARY_INV | cv2.THRESH_OTSU)
-cnts, _ = cv2.findContours(bin_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
-for cnt in cnts:
-    perim = cv2.arcLength(cnt, True)
-    if perim > 200:
-        rect = cv2.minAreaRect(cnt)
-        croped_image = crop_minAreaRect(image, rect)
-        croped_label = crop_minAreaRect(labels, rect)
+for path, _, files in lots:
+    for img in files:
+        if 'image' in img:
+            image = cv2.imread(path + '/' + img)
 
-        rows, cols = int(croped_label.shape[0]/2), int(croped_label.shape[1]/2)
-        label = 'Occupied' if croped_label[rows][cols][0] == 206 else 'Empty'
+            for pk_space_path in files:
+                if "mask" in pk_space_path:
+                    # Reads the image containing the individual parking space
+                    pk_space = cv2.imread(path + '/' + pk_space_path)
+                    pk_space = cv2.cvtColor(pk_space, cv2.COLOR_BGR2RGB)
+                    pk_space_gray = cv2.cvtColor(pk_space, cv2.COLOR_BGR2GRAY)
 
-        #cv2.imwrite('teste.jpeg', croped_image)
-        plt.imshow(croped_image)
-        plt.axis('off')
-        _ = plt.title("Label: " + label)
-        plt.show()
+                    _, bin_img = cv2.threshold(pk_space_gray,0,255,cv2.THRESH_BINARY | cv2.THRESH_OTSU)
+                    cnts, _ = cv2.findContours(bin_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+                    for cnt in cnts:
+                        perim = cv2.arcLength(cnt, True)
+                        if perim > 200:
+                            rect = cv2.minAreaRect(cnt)
+                            croped_image = crop_minAreaRect(image, rect)
+                            croped_label = crop_minAreaRect(pk_space, rect)
+
+                            rows, cols = int(croped_label.shape[0]/2), int(croped_label.shape[1]/2)
+                            label = 'Occupied' if croped_label[rows][cols][0] > 100 else 'Empty'
+
+                            pk_space_name = pk_space_path.replace('mask','pk-space')
+                            cv2.imwrite('labeled/{}/{}'.format(label, pk_space_name), croped_image)
+                            #plt.imshow(croped_image)
+                            #plt.axis('off')
+                            #_ = plt.title("Label: " + label)
+                            #plt.show()

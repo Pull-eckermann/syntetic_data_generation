@@ -18,7 +18,7 @@ class_names = np.array(class_names)
 IMAGE_SHAPE = (224, 224)
 
 # Restore the model
-export_path = "retrained/saved_models/parking_lot"
+export_path = "retrained/saved_models/parking_lot2"
 model = tf.keras.models.load_model(export_path)
 
 # Image that will be classified
