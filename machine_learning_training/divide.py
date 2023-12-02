@@ -23,11 +23,11 @@ for path, _, files in Lots:
             cont = 0
 
         if 'Occupied' in path:
-            dataset_path = dataset+'/Occupied'
+            dataset_path = dataset+'\\Occupied'
         else:
-            dataset_path = dataset+'/Empty'
+            dataset_path = dataset+'\\Empty'
             
         for img in files:
-            image = path + '/' + img #Path to the Parking Lot image
-            os.system('cp {} {}'.format(image, dataset_path))
+            image = path + '\\' + img #Path to the Parking Lot image
+            os.system('copy .\{} .\{}'.format(image, dataset_path))
         cont += 1

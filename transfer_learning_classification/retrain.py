@@ -1,111 +1,99 @@
+import matplotlib.pyplot as plt
 import numpy as np
-import matplotlib.pylab as plt
-
+import os
 import tensorflow as tf
-import tensorflow_hub as hub
 
-import datetime
+train_dir = '../../Datasets/UFPR05/Train'
+validation_dir = '../../Datasets/UFPR05/Test'
 
-# ================================Prepare dataset to retrain================================
-data_root = './syntetic-data/Train'
-#validation_data = '/home/venkopad/faculdade/syntetic_data_generation/transfer_learning_classification/real-data/Test'
 
-batch_size = 16
-img_height = 224
-img_width = 224
+BATCH_SIZE = 32
+IMG_SIZE = (160, 160)
 
-#First, load this data into the model using the image data off disk with 
-# tf.keras.utils.image_dataset_from_directory, which will generate a tf.data.Dataset:
-train_ds = tf.keras.utils.image_dataset_from_directory(
-  str(data_root),
-  validation_split=0.7,
-  subset="training",
-  seed=123,
-  image_size=(img_height, img_width),
-  batch_size=batch_size
-)
+# Read images from train directory
+train_dataset = tf.keras.utils.image_dataset_from_directory(train_dir,
+                                                            shuffle=True,
+                                                            batch_size=BATCH_SIZE,
+                                                            image_size=IMG_SIZE)
 
-val_ds = tf.keras.utils.image_dataset_from_directory(
-  str(data_root),
-  validation_split=0.2,
-  subset="validation",
-  seed=123,
-  image_size=(img_height, img_width),
-  batch_size=batch_size
-)
+# Read images from validation directory
+validation_dataset = tf.keras.utils.image_dataset_from_directory(validation_dir,
+                                                                 shuffle=True,
+                                                                 batch_size=BATCH_SIZE,
+                                                                 image_size=IMG_SIZE)
 
-#List the names of classes encountered
-class_names = np.array(train_ds.class_names)
-print(class_names)
+# Separe a set of validation dataset for test
+val_batches = tf.data.experimental.cardinality(validation_dataset)
+test_dataset = validation_dataset.take(val_batches // 5)
+validation_dataset = validation_dataset.skip(val_batches // 5)
 
-#Second, because TensorFlow Hub's convention for image models is to expect float 
-# inputs in the [0, 1] range, use the tf.keras.layers.Rescaling preprocessing layer to achieve this.
-normalization_layer = tf.keras.layers.Rescaling(1./255)
-train_ds = train_ds.map(lambda x, y: (normalization_layer(x), y)) # Where x—images, y—labels.
-val_ds = val_ds.map(lambda x, y: (normalization_layer(x), y)) # Where x—images, y—labels.
-
-#Third, finish the input pipeline by using buffered prefetching 
-# with Dataset.prefetch, so you can yield the data from disk without I/O blocking issues.
 AUTOTUNE = tf.data.AUTOTUNE
-train_ds = train_ds.cache().prefetch(buffer_size=AUTOTUNE)
-val_ds = val_ds.cache().prefetch(buffer_size=AUTOTUNE)
-for image_batch, labels_batch in train_ds:
-  print(image_batch.shape)
-  print(labels_batch.shape)
-  break
 
-# ================================Download and prepare model================================
-# Classifier model ho will be retrained
-mobilenet_v2 ="https://tfhub.dev/google/tf2-preview/mobilenet_v2/classification/4"
+train_dataset = train_dataset.prefetch(buffer_size=AUTOTUNE)
+validation_dataset = validation_dataset.prefetch(buffer_size=AUTOTUNE)
+test_dataset = test_dataset.prefetch(buffer_size=AUTOTUNE)
 
-IMAGE_SHAPE = (224, 224)
-
-#Create the feature extractor by wrapping the pre-trained model as a Keras layer with hub.KerasLayer. Use the trainable=False 
-# argument to freeze the variables, so that the training only modifies the new classifier layer:
-feature_extractor_layer = hub.KerasLayer(
-    mobilenet_v2,
-    input_shape=(224, 224, 3),
-    trainable=False)
-
-#Attach a classification head: To complete the model, wrap the feature extractor layer in a tf.keras.Sequential 
-# model and add a fully-connected layer for classification:
-num_classes = len(class_names)
-
-model = tf.keras.Sequential([
-  feature_extractor_layer,
-  tf.keras.layers.Dense(num_classes)
+#Data augmentation for dataset
+data_augmentation = tf.keras.Sequential([
+  tf.keras.layers.RandomFlip('horizontal'),
+  tf.keras.layers.RandomRotation(0.2),
 ])
 
-#Shows model appearence
+# Pixels rescaling to mobilenetv2 
+preprocess_input = tf.keras.applications.mobilenet_v2.preprocess_input
+rescale = tf.keras.layers.Rescaling(1./127.5, offset=-1)
+
+# Create the base model from the pre-trained model MobileNet V2
+IMG_SHAPE = IMG_SIZE + (3,)
+base_model = tf.keras.applications.MobileNetV2(input_shape=IMG_SHAPE,
+                                               include_top=False, # Remove the classification layer
+                                               weights='imagenet')
+# Freeze the layers to not change the weigths
+base_model.trainable = False
+
+# Let's take a look at the base model architecture
+base_model.summary()
+
+global_average_layer = tf.keras.layers.GlobalAveragePooling2D()
+prediction_layer = tf.keras.layers.Dense(1)
+
+inputs = tf.keras.Input(shape=(160, 160, 3))
+x = data_augmentation(inputs)
+x = preprocess_input(x)
+x = base_model(x, training=False)
+x = global_average_layer(x)
+x = tf.keras.layers.Dropout(0.2)(x)
+outputs = prediction_layer(x)
+model = tf.keras.Model(inputs, outputs)
+
+base_learning_rate = 0.0001
+model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=base_learning_rate),
+              loss=tf.keras.losses.BinaryCrossentropy(from_logits=True),
+              metrics=['accuracy'])
+
 model.summary()
 
-# ================================Train the model================================
-#Use Model.compile to configure the training process and add a tf.keras.callbacks.TensorBoard callback to create and store logs:
-model.compile(
-  optimizer=tf.keras.optimizers.Adam(),
-  loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-  metrics=['acc'])
 
-log_dir = "logs/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-tensorboard_callback = tf.keras.callbacks.TensorBoard(
-    log_dir=log_dir,
-    histogram_freq=1) # Enable histogram computation for every epoch.
+#================ Start training ====================
+initial_epochs = 10
 
-NUM_EPOCHS = 10
+# Test whitout training
+loss0, accuracy0 = model.evaluate(validation_dataset)
+print("initial loss: {:.2f}".format(loss0))
+print("initial accuracy: {:.2f}".format(accuracy0))
 
-#Start training
-history = model.fit(train_ds,
-                    validation_data=val_ds,
-                    epochs=NUM_EPOCHS,
-                    callbacks=tensorboard_callback)
+# Start training
+history = model.fit(train_dataset,
+                    epochs=initial_epochs,
+                    validation_data=validation_dataset)
 
-#Plot learning curves
-acc = history.history['acc']
-val_acc = history.history['val_acc']
+
+acc = history.history['accuracy']
+val_acc = history.history['val_accuracy']
 
 loss = history.history['loss']
 val_loss = history.history['val_loss']
-
+"""
 plt.figure(figsize=(8, 8))
 plt.subplot(2, 1, 1)
 plt.plot(acc, label='Training Accuracy')
@@ -124,27 +112,12 @@ plt.ylim([0,1.0])
 plt.title('Training and Validation Loss')
 plt.xlabel('epoch')
 plt.show()
-
+"""
 #Saves the model
-export_path = "retrained/saved_models/parking_lot2"
+export_path = "retrained/saved_models/UFPR05-real"
 model.save(export_path)
 
-# ================================Check the predictions================================
-#Obtain the ordered list of class names from the model predictions:
-predicted_batch = model.predict(image_batch)
-predicted_id = tf.math.argmax(predicted_batch, axis=-1)
-predicted_label_batch = class_names[predicted_id]
-
-#Plot the model predictions:
-
-plt.figure(figsize=(10,9))
-plt.subplots_adjust(hspace=0.5)
-
-for n in range(30):
-  plt.subplot(6,5,n+1)
-  plt.imshow(image_batch[n])
-  plt.title(predicted_label_batch[n].title())
-  plt.axis('off')
-_ = plt.suptitle("Model predictions")
-
-plt.show()
+# Test after training
+lossF, accuracyF = model.evaluate(test_dataset)
+print("Final loss: {:.2f}".format(lossF))
+print("Final accuracy: {:.2f}".format(accuracyF))
