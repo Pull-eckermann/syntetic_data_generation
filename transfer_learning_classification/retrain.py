@@ -3,8 +3,8 @@ import numpy as np
 import os
 import tensorflow as tf
 
-train_dir = '../../Datasets/UFPR05/Train'
-validation_dir = '../../Datasets/UFPR05/Test'
+train_dir = '../../Datasets/UFPR04/Train'
+validation_dir = '../../Datasets/UFPR04/Test'
 
 
 BATCH_SIZE = 32
@@ -41,7 +41,6 @@ data_augmentation = tf.keras.Sequential([
 
 # Pixels rescaling to mobilenetv2 
 preprocess_input = tf.keras.applications.mobilenet_v2.preprocess_input
-rescale = tf.keras.layers.Rescaling(1./127.5, offset=-1)
 
 # Create the base model from the pre-trained model MobileNet V2
 IMG_SHAPE = IMG_SIZE + (3,)
@@ -93,7 +92,7 @@ val_acc = history.history['val_accuracy']
 
 loss = history.history['loss']
 val_loss = history.history['val_loss']
-"""
+
 plt.figure(figsize=(8, 8))
 plt.subplot(2, 1, 1)
 plt.plot(acc, label='Training Accuracy')
@@ -112,12 +111,12 @@ plt.ylim([0,1.0])
 plt.title('Training and Validation Loss')
 plt.xlabel('epoch')
 plt.show()
-"""
+
 #Saves the model
-export_path = "retrained/saved_models/UFPR05-real"
+export_path = "retrained/saved_models/UFPR04-real"
 model.save(export_path)
 
 # Test after training
-lossF, accuracyF = model.evaluate(test_dataset)
+lossF, accuracyF = model.evaluate(test_dataset, verbose='True')
 print("Final loss: {:.2f}".format(lossF))
 print("Final accuracy: {:.2f}".format(accuracyF))
