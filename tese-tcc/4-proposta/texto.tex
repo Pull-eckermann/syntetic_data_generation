@@ -1,0 +1,67 @@
+\chapter{Proposta}
+
+%=====================================================
+
+O objetivo deste trabalho é explorar o potencial dos dados sintéticos para o treinamento de modelos de classificação visando a classificação precisa do status das vagas de estacionamento, entre ocupada ou livre. Essa proposta visa superar os desafios enfrentados na obtenção de conjuntos de imagens de treinamento com qualidade, diversidade e representatividade do mundo real para modelos de aprendizado de máquina. Além disso, planeja-se investigar como a utilização de dados sintéticos pode ser uma alternativa viável e eficaz para aprimorar as tarefas relacionadas a gestão de estacionamentos, oferecendo uma solução economicamente viável, eficiente e de baixo custo em comparação com a coleta de dados reais.
+
+\section{Dados e classificação}
+
+Nesta seção será apresentada a proposta com relação à geração das imagens sintéticas e o modelo de classificação de aprendizado de máquina utilizado.
+
+\subsection{Geração das imagens sintéticas}
+
+Para a geração das imagens sintéricas, planeja-se utilizar técnicas de geração de imagens sintéticas, simulando ambientes de estacionamento por meio do motor gráfico Unity3D e seu pacote de visão computacional, o Unity-perception \cite{unity-perception}. Esse pacote permite a aleatorização do ambiente 3D com mudanças nas posições dos carros, posições das de obstáculoa como árvores, aleatorização de texturas, intensidade e posição da luz, etc. Além disso as imagens serão geradas já com as informações para recorte das vagas de estacionamento e seus respectivos rótulos, como ocupadas ou livres, poupando assim o esforço de rotulação manual.
+
+Nesse ambiente 3D os parâmetros da câmera (Posição e angulação) serão estimados e replicados utilizando o programa OpenSource fSpy \cite{fSpy}, a fim de produzir imagens sintéticas com características semelhantes as reais. Essa ferramente possibilitará a estimação dos parãmetros da câmera de de forma simples, traçando quatro linhas que indicam os pontos focais da imagem, o que pode aumentar a acurácia do modelo com menor trabalho. A estimação da câmera será feita para cada um dos estacionamentos presentes no conjunto de dados PkLot \cite{pklot2}, ou seja, PUCPR, UFPR04 e UFPR05. Com isso serão produzidos dois conjuntos de imagens sintéticas para cada parâmetro estimado:
+
+\begin{itemize}
+    \item Domain Randomization: Imagens sintéticas do estacionamento utilizando a técnica proposta em Tobin et al.(2021)
+    \item Imagens sintéticas fotorealísticas: Imagens com uma qualidade de renderização maior, buscando simular de forma fiel as características presentes nas imagens reais
+\end{itemize}
+
+\subsection{Modelo classificação}
+
+Será adotada uma abordagem centrada em Redes Neurais Convolucionais (CNN) e na estratégia de transfer-learning, onde a MobileNetv2 será utilizada como modelo base. Esta abordagem se baseia na premissa de que um modelo treinado em um conjunto de dados amplo e representativo pode atuar como um modelo genérico eficaz. Durante o processo, a camada de classificação será removida e as camadas anteriores serão congeladas para preservar seus pesos durante o treinamento, desempenhando o papel de extratores de características. Posteriormente, será adicionada uma nova camada de classificação, a qual será treinada com os dados específicos desejados, adaptando assim o modelo pré-treinado para a tarefa específica de classificação das vagas como ocupadas ou livres.
+
+\section{Protocolo experimental proposto}
+
+Esta seção descreve como serão divididas as bases de dados entre conjunto de treino e teste, bem como o protocolo de validação e experimentos propostos para a validação dos modelos treinados.
+
+\subsection{Divisão em conjuntos de treino e teste}
+
+
+Serão treinados modelos utilizando tanto imagens reais disponíveis no conjunto de dados PkLot quanto suas versões sintéticas. As imagens sintéticas foram geradas aplicando os parâmetros estimados da câmera de cada estacionamento do PkLot em um ambiente 3D.
+
+No caso dos conjuntos da PkLot, será empregada a estratégia proposta no trabalho de Almeida et al. (2015), que determina que imagens do mesmo dia devem pertencer exclusivamente a um dos conjuntos, seja de treinamento ou de teste. Para cada estacionamento, as imagens serão divididas na proporção de 50\% para treinamento e teste, respeitando essa restrição.
+
+Os dados sintéticos serão exclusivamente utilizados no treinamento dos modelos, não sendo necessário dividir esses conjuntos de dados gerados. Portanto, os seguintes conjuntos de dados estarão disponíveis:
+
+\begin{itemize}
+    \item UFPR04 - Treino e Teste
+    \item UFPR04 sintético randomizado (Domain Randomization)
+    \item UFPR04 sintético fotorealista
+    \item UFPR05 - Treino e Teste
+    \item UFPR05 sintético randomizado (Domain Randomization)
+    \item UFPR05 sintético fotorealista
+    \item PUCPR - Treino e Teste
+    \item PUCPR sintético randomizado (Domain Randomization)
+    \item PUCPR sintético fotorealista
+\end{itemize}
+
+\subsection{Experimentos}
+
+Cada conjunto de imagens disponível e separado na etapa de divisão dos conjuntos de dados será alocado para o treinamento de um modelo específico. Os conjuntos de imagens sintéticas serão integralmente empregados como conjuntos de treinamento. No processo de validação durante o treinamento, serão utilizadas imagens do estacionamento real correspondente.
+
+A métrica de comparação principal será a acurácia simples. Nesse contexto, a predição será realizada em um conjunto de dados rotulados, seguida pelo cálculo da taxa de acertos, baseando-se nos rótulos originais de cada imagem. Os testes serão conduzidas, para um determinado modelo, da seguinte forma:
+
+\begin{itemize}
+    \item Teste com o subconjunto de Testes UFPR04
+    \item Teste com o subconjunto de Testes UFPR05
+    \item Teste com o subconjunto de Testes PUCPR
+    \item Teste com o conjunto de dados CNRPark-A
+    \item Teste com o conjunto de dados CNRPark-B
+\end{itemize}
+
+Essa análise comparativa permitirá avaliar a performance dos modelos em diferentes condições de treinamento, destacando as variações de desempenho entre modelos treinados com dados reais e os gerados sinteticamente, seja de forma aleatória ou fotorealista.
+
+%=====================================================
