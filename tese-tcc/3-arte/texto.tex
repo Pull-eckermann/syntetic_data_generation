@@ -1,0 +1,59 @@
+\chapter{Estado da Arte}
+
+%=====================================================
+% 3 - Estado da arte
+% 3.1 Como são criados os modelos de machine learning para classificar vagas hoje em dia?
+% Comece com a PKLot e CNRPark-EXT.
+% 3.2 Como são gerados dados sintéticos hoje em dia, e qual os resultados geralmente obtidos?
+
+Técnicas e modelos de aprendizado de máquina são amplamente utilizados hoje em dia nos mais diversos problemas, por conta disso, existe uma grande quantidade de base de dados disponíveis para o treinamento de modelos, dos mais diversos tipos. Entretando, mesmo com as bases de dados disponíveis atualmente, o problema de classificação de vagas de estacionamento ainda é um problema em aberto\cite{systematic-review}. Tanto este quanto diversos outros problemas ainda possuem uma certa carência de dados, por isso um crescente interesse na geração e uso dados sintéticos tem sido notado. Neste capítulo serão discutidos os métodos atuais de machine learning para classificação de vagas de estacionamento e também como são gerados os dados sintéticos hoje em dia e quais os resultados obtidos.
+
+\section{Classificação de Vagas}
+\subsection{Conjuntos de dados}
+\subsubsection{PkLot}
+
+O conjunto de dados PKLot \cite{pklot2} é uma base comumente usada para pesquisa em detecção de vagas de estacionamento por meio de visão computacional. O PKLot contém imagens de diferentes estacionamentos capturadas por câmeras posicionadas em várias alturas e ângulos, registrando condições variadas de iluminação, clima e ocupação de vagas. As imagens são categorizadas em dois grupos principais: ocupadas e livres. Cada imagem está associada a um rótulo indicando se a vaga de estacionamento está ocupada ou desocupada.
+
+O PKLot oferece uma gama diversificada de desafios para algoritmos de detecção de vagas de estacionamento, abrangendo diferentes situações e cenários do mundo real. Essa diversidade é valiosa para treinar e avaliar algoritmos de aprendizado de máquina e visão computacional, permitindo o desenvolvimento de sistemas robustos capazes de identificar automaticamente a ocupação de vagas em estacionamentos com base nas imagens fornecidas.
+
+\subsubsection{CNRPark-EXT}
+
+O CNRPark-EXT \cite{cnrpark} é um conjunto de dados usado para pesquisas na área de detecção de ocupação de vagas de estacionamento por meio de técnicas de visão computacional. Especificamente, é uma expansão do conjunto de dados CNRPark, que foi desenvolvido para avaliar algoritmos de reconhecimento de ocupação de vagas em estacionamentos.
+
+É composto por imagens capturadas por câmeras instaladas em 9 diferentes ambientes de estacionamento. Essas imagens apresentam variações em iluminação, condições climáticas e diferentes ângulos de visualização, tornando o conjunto de dados desafiador e representativo de situações do mundo real. Ele é utilizado para treinar e avaliar modelos de machine learning e algoritmos de visão computacional, visando classificar automaticamente vagas de estacionamento como ocupadas ou livres. 
+
+\subsection{Métodos de classificação}
+\subsubsection{Baseados em extração de características}
+
+Métodos de classificação baseados em extração de características são técnicas fundamentais em aprendizado de máquina, focadas em identificar atributos relevantes a partir dos dados originais. Essas características, obtidas por meio de análises estatísticas, transformações de dados ou descrições visuais, procuram capturar informações cruciais para diferenciar e classificar padrões ou objetos. Após a extração, algoritmos de classificação, como Support Vector Machine (SVM), Multilayer Perceptron (MLP), e outros, são treinados, utilizando as características selecionadas como base para a tomada de decisão.
+
+O trabalho de Almeida et al. (2013) propõe o uso de características LPQ e LBP extraídas das imagens como vetores de características e SVMs como classificadores. Neste trabalho, a primeira versão da base de dados PKLot foi introduzida. O trabalho e a base de dados foram expandidos em Almeida et al. (2015), onde a base de dados PKLot completa foi disponibilizada. Conjuntos de SVMs treinados utilizando diversas variações dos métodos LPQ/LBP como características foram utilizados para classificação.
+
+Este método resultou em desempenhos satisfatórios, contudo revelou limitações em termos de generalização. Em geral, ao treinar um classificador com um subconjunto de imagens de um determinado estacionamento e testá-lo com outro subconjunto do mesmo estacionamento, alcançamos consistentemente uma acurácia média de aproximadamente 99,5\%, praticamente atingindo 100\%. No entanto, ao treinar o modelo com um conjunto de imagens de um estacionamento específico e testá-lo com imagens de outros estacionamentos, a acurácia média caiu para cerca de 85\%. Essa redução na precisão ao lidar com dados de estacionamentos distintos sugere que o método pode ser eficaz dentro do mesmo contexto de estacionamento, mas enfrenta dificuldades na generalização para diferentes ambientes ou cenários.
+
+\subsubsection{Redes Neurais Convolucionais (CNN)}
+
+Uma aplicação de Redes Neurais Convolucionais (CNN) na classificação de vagas de estacionamento foi introduzida em Amato et al.(2016). Os pesquisadores desenvolveram a rede mAlexNet, modelada a partir da estrutura da AlexNet, e realizaram experimentos utilizando o conjunto de dados CNRPark. Este estudo empregou a versão expandida do conjunto de dados, CNRPark-EXT, para treinamento e teste, além da utilização da base de dados PKLot. A rede mAlexNet demonstrou habilidade para lidar com as variações presentes nos estacionamentos e diferentes ângulos de câmera, mantendo pequenas reduções na precisão em vários cenários.
+
+
+\section{Geração de dados Sintéticos}
+
+Os dados sintéticos são gerados artificialmente e algoritimicamente e são empregados no treinamento de modelos de machine learning para complementar conjuntos de dados existentes ou compensar a falta de dados reais. Eles desempenham um papel crucial ao aumentar a diversidade e a quantidade de amostras disponíveis, especialmente em cenários onde os conjuntos de dados são limitados ou insuficientes. Além disso, esses dados podem ser úteis na representação de situações raras, na preservação da privacidade dos dados reais, na redução de viéses nos conjuntos de dados e na criação de cenários de teste e validação para garantir a robustez dos modelos de machine learning.
+
+Diversas ferramentas podem ser utilizadas para a geração de dados sitéticos. Com relação a imagens sintéticas, as ferramentas mais utilizadas são motores gráficos e engines de jogos como Unity e Unreal Engine. Dando destaque às engines de jogos, existem pacotes personalizados que auxiliam na aleatorização, captura e rotulação dos dados, como é o caso do Unity perception \cite{unity-perception}, para o Unity3d, e o NDDS\cite{NDDS} para a Unreal Engine 4.
+
+Entretanto, existem algumas barreiras quando se trata de utilizar dados sintéticos para ttreinamento. O "Reality Gap", conhecido como a lacuna entre ambientes sintéticos e a complexidade do mundo real, resulta na dificuldade dos modelos treinados apenas com dados sintéticos em se adaptarem adequadamente a situações reais. Essa discrepância surge devido à complexidade em simular fielmente todas as características visuais, físicas e dinâmicas do mundo real nos dados sintéticos. Elementos como iluminação, texturas, variações climáticas e interações complexas são desafios para a reprodução precisa. Consequentemente, modelos treinados exclusivamente com dados sintéticos podem ter dificuldade em generalizar para situações reais. Uma estratégia para superar essa limitação é combinar dados sintéticos e reais durante o treinamento, oferecendo ao modelo uma exposição mais diversificada e possibilitando uma melhor adaptação e desempenho em cenários do mundo real. Outras técnicas também estão presentes na literatura.
+
+\subsection{Domain Randomization}
+
+O conceito de domain-randomization \cite{domain-random}, envolve introduzir aleatoriedade deliberada nos ambientes de treinamento sintéticos usados para ensinar modelos de machine learning, principalmente com imagens. Essa técnica visa criar uma variedade maior de cenários, ajustando aleatoriamente parâmetros como texturas, iluminação e formas geométricas. Ao variar aleatoriamente as características do ambiente virtual os modelos são expostos a uma ampla gama de condições durante o treinamento. Essa diversidade ajuda os modelos a se adaptarem a diferentes variações que podem ser encontradas no mundo real, capacitando-os a generalizar de forma mais eficaz para situações reais. Em essência, ao simular uma maior variedade de cenários durante o treinamento, os modelos se tornam mais robustos e capazes de lidar com a complexidade e as variações do mundo real, diminuindo a diferença entre os ambientes virtuais e o mundo real.
+
+O estudo de Tobin et al.(2021) demonstrou que um detector de objetos treinado exclusivamente em simulação utilizando a técnica de domain randomization pode atingir uma precisão suficientemente alta no mundo real, possibilitando a realização de agarramentos em ambientes com obstáculos. 
+
+\subsection{Combinação de imagens fotorealísticas e Domain Randomization}
+
+Em Tremblay et al.(2018) foi demonstrado que a combinação de imagens sintéticas não fotorealistas (Domain Randomization) com imagens sintéticas fotorealistas, para o treinamento de redes neurais, supera com sucesso o problema de reality-gap para aplicações no mundo real, alcançando desempenho comparável com redes de última geração treinadas em dados reais.
+
+A combinação de imagens fotorealísticas e domain randomization no treinamento de modelos de deep learning é eficiente porque atenua a diferença entre ambientes sintéticos e o mundo real. Enquanto as imagens fotorealísticas replicam detalhes visuais precisos do mundo real, o domain randomization introduz variações controladas ou aleatórias nos ambientes virtuais. Essa abordagem amplia a diversidade dos dados de treinamento, permitindo que os modelos se adaptem a uma variedade de condições presentes na prática, fortalecendo sua capacidade de generalização para situações reais ao minimizar a lacuna da realidade durante o treinamento.
+
+%=====================================================

@@ -1,0 +1,96 @@
+\chapter{Resultados}
+
+%=====================================================
+
+Neste sessão serão apresentados e discutidos os resultados dos experimentos propostos na sessão 3.
+
+\section{Execuções}
+
+A tabela \ref{tab:UFPR04} mostra os resultados dos experimentos tendo como base o estacionamento UFPR04. Pode-se ver que no geral o modelo apresentou bons resultados tanto para os dados sintéticos como para os reais, tendo uma acurácia acima de 0.95 na maioria dos casos. Porém sua melhor performance fica evidente com o modelo treinado com os dados realistas, que alcançou uma acurácia exelente de em média 0.99 com os estacionamentos da PkLot, mostrando a capacidade de generalização do modelo treinado com dados reais. Os modelos treinados com dados sintéticos se mantiveram numa média de acurácia de 0.95, o que é um bom resultado, mesmo não alcançando a performance do modelo treinado com dados reais.
+
+\begin{table}[!htp] 
+\centering
+\caption{Resultados UFPR04}
+\label{tab:UFPR04}
+\begin{tabular}{|c|cccc|}
+\cline{1-5}
+\multicolumn{1}{|}{} & Conjunto Treino & Conjunto Teste & Acurácia & Loss \\
+\hline
+\texttt{} & UFPR04 & UFPR04 & \textbf{0.9973784685134888} & \textbf{0.00744111975654959} \\
+\texttt{} &  & UFPR05 & 0.992316206073761 & 0.026203461998701096 \\
+\texttt{} &  & PUCPR & 0.9913341999053955 & 0.03602888807654381 \\
+\texttt{} &  & CNRPark-A & 0.9787716865539551 & 0.07389025390148163 \\
+\texttt{} &  & CNRPark-B & 0.8300327658653259 & 0.7406405806541443 \\
+\hline
+\texttt{} & UFPR04 sintético randomizado & UFPR04 & 0.9643054008483887 & 0.17444078624248505 \\
+\texttt{} &  & UFPR05 & 0.947799563407898 & 0.2021385282278061 \\
+\texttt{} &  & PUCPR & \textbf{0.9684255123138428} & 0.14903266727924347 \\
+\texttt{} &  & CNRPark-A & 0.9554367065429688 & \textbf{0.11254721879959106} \\
+\texttt{} &  & CNRPark-B & 0.7871510982513428 & 0.4944949746131897 \\
+\hline
+\texttt{} & UFPR04 sintético fotorealista & UFPR04 & 0.9548830986022949 & 0.24915337562561035 \\
+\texttt{} &  & UFPR05 & 0.9618846774101257 & 0.22398780286312103 \\
+\texttt{} &  & PUCPR & \textbf{0.9699152708053589} & 0.2288242131471634 \\
+\texttt{} &  & CNRPark-A & 0.9530059695243835 & \textbf{0.1626977175474167} \\
+\texttt{} &  & CNRPark-B & 0.6970216631889343 & 0.5185118317604065 \\
+\hline
+\end{tabular}
+\end{table}
+
+As tabelas \ref{tab:UFPR05} e \ref{tab:PUCPR} mostram os resultados dos experimentos tendo como base os estacionamentos UFPR05 e PUCPR, respectivamente. Pode-se notar que os resultados da PUCPR são semelhantes aos da UFPR04 tanto para os dados reais como os conjuntos gerados sinteticamente, se mantendo numa acurácia de em média 0.98 com o modelo treinado com dados reais e 0.96 com o modelo treinado com dados sintéticos. Podemos notar também a boa capacidade de generalização, já que o modelo treinado apenas com o subconjunto PUCPR apresentou resultados muito bons em todos os outro, salvo CNRPark-B. Já os resultados com os modelos sintéticos da UFPR05 apresentaram resultados piores do que o geral, tendo uma média de acurácia de 0.75, mas mantevesse com resultados igualmente satisfatório aos outros, com relação ao modelo treinado com as imagens reais.
+
+\begin{table}[!htp] 
+\centering
+\caption{Resultados UFPR05}
+\label{tab:UFPR05}
+\begin{tabular}{|c|cccc|}
+\cline{1-5}
+\multicolumn{1}{|}{} & Conjunto Treino & Conjunto Teste & Acurácia & Loss \\
+\hline
+\texttt{} & UFPR05 & UFPR04 & 0.9930852651596069 & 0.02502281218767166 \\
+\texttt{} &  & UFPR05 & \textbf{0.9960375428199768} & \textbf{0.01266891323029995} \\
+\texttt{} &  & PUCPR & 0.9834603071212769 & 0.06736186891794205 \\
+\texttt{} &  & CNRPark-A & 0.9630529880523682 & 0.09921148419380188\\
+\texttt{} &  & CNRPark-B & 0.7893341779708862 & 0.8512572646141052 \\
+\hline
+\texttt{} & UFPR05 sintético randomizado & UFPR04 & 0.6991318464279175 & 0.67948979139328 \\
+\texttt{} &  & UFPR05 & 0.7014817595481873 & 0.6748328804969788 \\
+\texttt{} &  & PUCPR & 0.7480219006538391 & 0.6681806445121765 \\
+\texttt{} &  & CNRPark-A & \textbf{0.9649975895881653} & \textbf{0.14781269431114197} \\
+\texttt{} &  & CNRPark-B & 0.8379853367805481 & 0.4422059655189514 \\
+\hline
+\texttt{} & UFPR05 sintético fotorealista & UFPR04 & 0.7719458341598511 & 0.557625949382782 \\
+\texttt{} &  & UFPR05 & 0.8048615455627441 & 0.488942414522171\\
+\texttt{} &  & PUCPR & 0.8372944593429565 & 0.4830848276615143 \\
+\texttt{} &  & CNRPark-A & \textbf{0.9350186586380005} & \textbf{0.22728793323040009} \\
+\texttt{} &  & CNRPark-B & 0.7784188389778137 & 0.44967198371887207 \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[!htp] 
+\centering
+\caption{Resultados PUCPR}
+\label{tab:PUCPR}
+\begin{tabular}{|c|cccc|}
+\cline{1-5}
+\multicolumn{1}{|}{} & Conjunto Treino & Conjunto Teste & Acurácia & Loss \\
+\hline
+\texttt{} & PUCPR & UFPR04 & 0.9933891892433167 & 0.01860688626766205\\
+\texttt{} &  & UFPR05 & 0.9871246814727783 & 0.04195189103484154 \\
+\texttt{} &  & PUCPR & \textbf{0.9986397624015808} & \textbf{0.00746541703119874} \\
+\texttt{} &  & CNRPark-A & 0.9763409495353699 & 0.05127578601241112 \\
+\texttt{} &  & CNRPark-B & 0.7165133357048035 & 1.0377250909805298 \\
+\hline
+\texttt{} & PUCPR sintético randomizado & UFPR04 & \textbf{0.9806804656982422} & \textbf{0.08626607060432434} \\
+\texttt{} &  & UFPR05 & 0.971541166305542 & 0.1300220787525177 \\
+\texttt{} &  & PUCPR & 0.9699800610542297 & 0.10714691877365112 \\
+\texttt{} &  & CNRPark-A & 0.9570571780204773 & 0.08663547039031982 \\
+\texttt{} &  & CNRPark-B & 0.8064868450164795 & 0.5178163051605225 \\
+\hline
+\end{tabular}
+\end{table}
+
+Em geral, todos os testes tiveram resultados não tão satisfatórios quando testados no conjunto CNRPark-B. Isso pode ser causado devido os problemas desse conjunto, que envolvem uma má qualidade da imagem e considerável oclusão na maior parte das imagens. Também podemos dizer que a angulação da câmera não pareceu fazer tanta diferença nos resultados dos modelos treinados inteiramente com dados sintéticos, pois as melhores acurácias não corresponderam aso conjuntos de dados respectivos aos parâmetros do estacionamento estimado.
+
+%=====================================================
