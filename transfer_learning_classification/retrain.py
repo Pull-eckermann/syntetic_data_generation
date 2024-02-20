@@ -3,8 +3,8 @@ import numpy as np
 import os
 import tensorflow as tf
 
-train_dir = '../../Datasets/UFPR04/Train'
-validation_dir = '../../Datasets/UFPR04/Test'
+train_dir = '../../cnrpark/rotated-rect/CNRPark-EXT/Train'
+validation_dir = '../../cnrpark/rotated-rect/CNRPark-EXT/Test'
 
 
 BATCH_SIZE = 32
@@ -92,7 +92,7 @@ val_acc = history.history['val_accuracy']
 
 loss = history.history['loss']
 val_loss = history.history['val_loss']
-
+"""
 plt.figure(figsize=(8, 8))
 plt.subplot(2, 1, 1)
 plt.plot(acc, label='Training Accuracy')
@@ -111,9 +111,9 @@ plt.ylim([0,1.0])
 plt.title('Training and Validation Loss')
 plt.xlabel('epoch')
 plt.show()
-
+"""
 #Saves the model
-export_path = "retrained/saved_models/UFPR04-real"
+export_path = "retrained/saved_models/CNRPark-rotated-rect"
 model.save(export_path)
 
 # Test after training
