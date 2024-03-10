@@ -2,13 +2,36 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 import tensorflow as tf
+from keras.callbacks import Callback
 
-train_dir = '../../cnrpark/rotated-rect/CNRPark-EXT/Train'
-validation_dir = '../../cnrpark/rotated-rect/CNRPark-EXT/Test'
+
+train_dir = '../../Datasets/PKLot-rotated-rect/All-data/Train'
+validation_dir = '../../Datasets/PKLot-rotated-rect/All-data/Test'
 
 
 BATCH_SIZE = 32
 IMG_SIZE = (160, 160)
+
+"""
+train_dataset = tf.keras.utils.image_dataset_from_directory(
+  train_dir,
+  shuffle=True,
+  validation_split=0.3,
+  subset="training",
+  seed=123,
+  image_size=IMG_SIZE,
+  batch_size=BATCH_SIZE
+)
+
+validation_dataset = tf.keras.utils.image_dataset_from_directory(
+  validation_dir,
+  validation_split=0.3,
+  subset="validation",
+  seed=123,
+  image_size=IMG_SIZE,
+  batch_size=BATCH_SIZE
+)
+"""
 
 # Read images from train directory
 train_dataset = tf.keras.utils.image_dataset_from_directory(train_dir,
@@ -18,7 +41,7 @@ train_dataset = tf.keras.utils.image_dataset_from_directory(train_dir,
 
 # Read images from validation directory
 validation_dataset = tf.keras.utils.image_dataset_from_directory(validation_dir,
-                                                                 shuffle=True,
+                                                                 shuffle=False,
                                                                  batch_size=BATCH_SIZE,
                                                                  image_size=IMG_SIZE)
 
@@ -40,13 +63,14 @@ data_augmentation = tf.keras.Sequential([
 ])
 
 # Pixels rescaling to mobilenetv2 
-preprocess_input = tf.keras.applications.mobilenet_v2.preprocess_input
+preprocess_input = tf.keras.applications.mobilenet_v3.preprocess_input
 
-# Create the base model from the pre-trained model MobileNet V2
+# Create the base model from the pre-trained model MobileNet V3
 IMG_SHAPE = IMG_SIZE + (3,)
-base_model = tf.keras.applications.MobileNetV2(input_shape=IMG_SHAPE,
+base_model = tf.keras.applications.MobileNetV3Large(input_shape=IMG_SHAPE,
                                                include_top=False, # Remove the classification layer
-                                               weights='imagenet')
+                                               weights='imagenet',
+                                               include_preprocessing=True)
 # Freeze the layers to not change the weigths
 base_model.trainable = False
 
@@ -74,19 +98,26 @@ model.summary()
 
 
 #================ Start training ====================
-initial_epochs = 10
+initial_epochs = 15
 
 # Test whitout training
-loss0, accuracy0 = model.evaluate(validation_dataset)
+loss0, accuracy0 = model.evaluate(test_dataset)
 print("initial loss: {:.2f}".format(loss0))
 print("initial accuracy: {:.2f}".format(accuracy0))
 
 # Start training
+# Callbacks to save the best model
+earlyStopping= tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=5, verbose=1, mode='auto')
+saveBestModel = tf.keras.callbacks.ModelCheckpoint(filepath="retrained/weights.hdf5", monitor='val_loss', verbose=1, save_best_only=True, mode='auto')
+
 history = model.fit(train_dataset,
                     epochs=initial_epochs,
-                    validation_data=validation_dataset)
+                    validation_data=validation_dataset,
+                    callbacks=[earlyStopping, saveBestModel])
 
+model.load_weights('retrained/weights.hdf5')
 
+#================ Generats training graph ====================
 acc = history.history['accuracy']
 val_acc = history.history['val_accuracy']
 
@@ -113,7 +144,7 @@ plt.xlabel('epoch')
 plt.show()
 """
 #Saves the model
-export_path = "retrained/saved_models/CNRPark-rotated-rect"
+export_path = "retrained/saved_models/PKLot-rrect-v3"
 model.save(export_path)
 
 # Test after training

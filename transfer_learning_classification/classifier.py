@@ -8,10 +8,7 @@ from sklearn import metrics
 BATCH_SIZE = 32
 IMG_SIZE = (160, 160)
 
-export_path = "retrained/saved_models/CNRPark-bounding-box"
-#export_path = "retrained/saved_models/CNRPark-rotated-rect"
-#export_path = "retrained/saved_models/PKLot-rotated-rect"
-#export_path = "retrained/saved_models/PKLot-bounding-box"
+export_path = "retrained/saved_models/PKLot-rrect-v3"
 
 try:
     validation_dir = sys.argv[1]
@@ -50,8 +47,6 @@ matrix = tf.math.confusion_matrix(labels, predicted_labels)
 print("Confusion Matrix:")
 print(np.asarray(matrix))
 
-class_names = ['Empty', 'Occupied']
-class_names = np.array(class_names)
 ----------------------------------------------
 scores = []
 labels = []
