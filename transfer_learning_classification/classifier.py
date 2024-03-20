@@ -1,14 +1,12 @@
-import matplotlib.pyplot as plt
 import numpy as np
 import sys
 import tensorflow as tf
-from sklearn import metrics
-
+#from sklearn import metrics
 
 BATCH_SIZE = 32
 IMG_SIZE = (160, 160)
 
-export_path = "retrained/saved_models/PKLot-rrect-v3"
+export_path = "retrained/saved_models/CNR-rrect-v3"
 
 try:
     validation_dir = sys.argv[1]
@@ -16,8 +14,8 @@ except:
     print("Please specify the path to the dataset dir")
     exit(0)
 
-validation_dataset = tf.keras.utils.image_dataset_from_directory(validation_dir,
-                                                                 shuffle=True,
+validation_dataset = tf.keras.preprocessing.image_dataset_from_directory(validation_dir,
+                                                                 shuffle=False,
                                                                  batch_size=BATCH_SIZE,
                                                                  image_size=IMG_SIZE)
 
