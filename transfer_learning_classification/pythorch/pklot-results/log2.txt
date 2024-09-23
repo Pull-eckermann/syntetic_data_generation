@@ -1,0 +1,223 @@
+02/09/2024 at 23:55:36 - Configurando modelo
+02/09/2024 at 23:55:38 - Iniciando treinamento
+
+03/09/2024 at 00:14:32 - Epoch 1 finished training.
+	Training Loss: 0.004626732819204992
+
+	Empty Training Spots: 360459
+	Occupied Training Spots: 309381
+	Total Training Data: 669840
+03/09/2024 at 00:16:39 - Epoch 1 finished validation.
+	Validation Accuracy: 99.71023286387167%
+	Validation Loss: 0.012014288431768924
+
+	Empty Validation Spots: 113754
+	Occupied Validation Spots: 143349
+	Total Validation Data: 257103
+
+03/09/2024 at 00:35:32 - Epoch 2 finished training.
+	Training Loss: 0.00158562383356694
+
+	Empty Training Spots: 474213
+	Occupied Training Spots: 452730
+	Total Training Data: 669840
+03/09/2024 at 00:37:39 - Epoch 2 finished validation.
+	Validation Accuracy: 99.76429679933723%
+	Validation Loss: 0.011772882021959063
+
+	Empty Validation Spots: 113754
+	Occupied Validation Spots: 143349
+	Total Validation Data: 257103
+
+03/09/2024 at 00:56:31 - Epoch 3 finished training.
+	Training Loss: 0.0011589591245960086
+
+	Empty Training Spots: 474213
+	Occupied Training Spots: 452730
+	Total Training Data: 669840
+03/09/2024 at 00:58:39 - Epoch 3 finished validation.
+	Validation Accuracy: 99.71567815233583%
+	Validation Loss: 0.013307597210281321
+
+	Empty Validation Spots: 113754
+	Occupied Validation Spots: 143349
+	Total Validation Data: 257103
+
+03/09/2024 at 01:17:32 - Epoch 4 finished training.
+	Training Loss: 0.0010125325213196266
+
+	Empty Training Spots: 474213
+	Occupied Training Spots: 452730
+	Total Training Data: 669840
+03/09/2024 at 01:19:39 - Epoch 4 finished validation.
+	Validation Accuracy: 99.6833953707269%
+	Validation Loss: 0.018301746278910097
+
+	Empty Validation Spots: 113754
+	Occupied Validation Spots: 143349
+	Total Validation Data: 257103
+
+03/09/2024 at 01:38:32 - Epoch 5 finished training.
+	Training Loss: 0.0008029781615004232
+
+	Empty Training Spots: 474213
+	Occupied Training Spots: 452730
+	Total Training Data: 669840
+03/09/2024 at 01:40:39 - Epoch 5 finished validation.
+	Validation Accuracy: 99.73979300124853%
+	Validation Loss: 0.012678398739758208
+
+	Empty Validation Spots: 113754
+	Occupied Validation Spots: 143349
+	Total Validation Data: 257103
+
+03/09/2024 at 01:59:31 - Epoch 6 finished training.
+	Training Loss: 0.000657653364566529
+
+	Empty Training Spots: 474213
+	Occupied Training Spots: 452730
+	Total Training Data: 669840
+03/09/2024 at 02:01:38 - Epoch 6 finished validation.
+	Validation Accuracy: 99.78763374989789%
+	Validation Loss: 0.013902384805570567
+
+	Empty Validation Spots: 113754
+	Occupied Validation Spots: 143349
+	Total Validation Data: 257103
+
+03/09/2024 at 02:20:30 - Epoch 7 finished training.
+	Training Loss: 0.000585420693202296
+
+	Empty Training Spots: 474213
+	Occupied Training Spots: 452730
+	Total Training Data: 669840
+03/09/2024 at 02:22:38 - Epoch 7 finished validation.
+	Validation Accuracy: 99.70945496551965%
+	Validation Loss: 0.01763850028550307
+
+	Empty Validation Spots: 113754
+	Occupied Validation Spots: 143349
+	Total Validation Data: 257103
+
+03/09/2024 at 02:41:30 - Epoch 8 finished training.
+	Training Loss: 0.00020403562301142268
+
+	Empty Training Spots: 474213
+	Occupied Training Spots: 452730
+	Total Training Data: 669840
+03/09/2024 at 02:43:37 - Epoch 8 finished validation.
+	Validation Accuracy: 99.78296635978576%
+	Validation Loss: 0.01662908365826124
+
+	Empty Validation Spots: 113754
+	Occupied Validation Spots: 143349
+	Total Validation Data: 257103
+
+03/09/2024 at 03:02:29 - Epoch 9 finished training.
+	Training Loss: 0.00012700611661906302
+
+	Empty Training Spots: 474213
+	Occupied Training Spots: 452730
+	Total Training Data: 669840
+03/09/2024 at 03:04:36 - Epoch 9 finished validation.
+	Validation Accuracy: 99.80669225952245%
+	Validation Loss: 0.017084170971479226
+
+	Empty Validation Spots: 113754
+	Occupied Validation Spots: 143349
+	Total Validation Data: 257103
+
+03/09/2024 at 03:23:28 - Epoch 10 finished training.
+	Training Loss: 9.20127701313543e-05
+
+	Empty Training Spots: 474213
+	Occupied Training Spots: 452730
+	Total Training Data: 669840
+03/09/2024 at 03:25:36 - Epoch 10 finished validation.
+	Validation Accuracy: 99.79463483506609%
+	Validation Loss: 0.019047056777123594
+
+	Empty Validation Spots: 113754
+	Occupied Validation Spots: 143349
+	Total Validation Data: 257103
+
+03/09/2024 at 03:44:28 - Epoch 11 finished training.
+	Training Loss: 6.60507440227364e-05
+
+	Empty Training Spots: 474213
+	Occupied Training Spots: 452730
+	Total Training Data: 669840
+03/09/2024 at 03:46:35 - Epoch 11 finished validation.
+	Validation Accuracy: 99.79852432682621%
+	Validation Loss: 0.02160867325417653
+
+	Empty Validation Spots: 113754
+	Occupied Validation Spots: 143349
+	Total Validation Data: 257103
+
+03/09/2024 at 04:05:27 - Epoch 12 finished training.
+	Training Loss: 6.774429154984517e-05
+
+	Empty Training Spots: 474213
+	Occupied Training Spots: 452730
+	Total Training Data: 669840
+03/09/2024 at 04:07:35 - Epoch 12 finished validation.
+	Validation Accuracy: 99.7981353776502%
+	Validation Loss: 0.023008415891682135
+
+	Empty Validation Spots: 113754
+	Occupied Validation Spots: 143349
+	Total Validation Data: 257103
+
+03/09/2024 at 04:26:27 - Epoch 13 finished training.
+	Training Loss: 4.3750261482457966e-05
+
+	Empty Training Spots: 474213
+	Occupied Training Spots: 452730
+	Total Training Data: 669840
+03/09/2024 at 04:28:34 - Epoch 13 finished validation.
+	Validation Accuracy: 99.8086370054025%
+	Validation Loss: 0.02500248243054624
+
+	Empty Validation Spots: 113754
+	Occupied Validation Spots: 143349
+	Total Validation Data: 257103
+
+03/09/2024 at 04:47:26 - Epoch 14 finished training.
+	Training Loss: 5.304999727560084e-05
+
+	Empty Training Spots: 474213
+	Occupied Training Spots: 452730
+	Total Training Data: 669840
+03/09/2024 at 04:49:33 - Epoch 14 finished validation.
+	Validation Accuracy: 99.77440947791352%
+	Validation Loss: 0.028875422364570295
+
+	Empty Validation Spots: 113754
+	Occupied Validation Spots: 143349
+	Total Validation Data: 257103
+
+03/09/2024 at 05:08:26 - Epoch 15 finished training.
+	Training Loss: 1.2326910385250293e-05
+
+	Empty Training Spots: 474213
+	Occupied Training Spots: 452730
+	Total Training Data: 669840
+03/09/2024 at 05:10:33 - Epoch 15 finished validation.
+	Validation Accuracy: 99.79035639412997%
+	Validation Loss: 0.02815940051457931
+
+	Empty Validation Spots: 113754
+	Occupied Validation Spots: 143349
+	Total Validation Data: 257103
+
+
+EER: 0.0019779524236510364
+EER threshold: 0.1838259994983673
+03/09/2024 at 05:11:50 - Finished CNRPark-EXT testing. 
+	Testing Loss: 0.23312825157973524
+	Testing Accuracy: 95.76130900169495%
+
+	Empty Testing Spots: 67972
+	Occupied Testing Spots: 83655
+	Total Testing Data: 151627

@@ -1,96 +1,123 @@
-\chapter{Resultados}
+\chapter{Experimentos}
 
 %=====================================================
 
-Neste sessão serão apresentados e discutidos os resultados dos experimentos propostos na sessão 3.
+Para garantir a capacidade de generalização dos modelos, os experimentos conduzidos neste trabalho são realizados em cenários cruzados, levando em conta as bases CNRPark-EXT \citet{cnrpark} e PKLot \citep{pklot2}. Ou seja, o padrão definido é sempre treinar o modelo em uma das bases e validar em outra, realizando a adição ou não das imagens sintéticas. Para isso, quatro principais cenários foram considerados em relação ao treinamento dos modelos, todos utilizando o processo de aprendizado por transferência:
+\begin{itemize}
+    \item M1 - Modelos treinados somente com imagens reais
+    \item M2 - Modelos treinados somente com imagens sintéticas
+    \item M3 - Modelos treinados com imagens reais adicionadas de todas as imagens sintéticas geradas
+    \item M4 - Modelos treinados com imagens reais adicionadas de uma base de imagens sintéticas específica para um cenário (Um modelo para cada câmera da base que vai ser usada para validação)
+\end{itemize}
 
-\section{Execuções}
+As bases com imagens reais (PKLot e CNRPark-EXT) são ordenadas em ordem crescente dos dias de captura e divididas na proporção de 70\% para treino e 30\% para teste em cada dia. O modelo de apenas imagens sintéticas soma todas as imagens as divide na mesma  proporção, 70\% das imagens totais para treino e 30\% para teste durante o treinamento. Aos modelos que usam a mistura entre imagens reais e sintéticas, soma-se as imagens do subconjunto de treino da base real as imagens sintéticas (Específicas de um cenário ou todas juntas). No total, 17 modelos foram treinados e utilizados nos experimentos.
 
-A tabela \ref{tab:UFPR04} mostra os resultados dos experimentos tendo como base o estacionamento UFPR04. Pode-se ver que no geral o modelo apresentou bons resultados tanto para os dados sintéticos como para os reais, tendo uma acurácia acima de 0.95 na maioria dos casos. Porém sua melhor performance fica evidente com o modelo treinado com os dados realistas, que alcançou uma acurácia exelente de em média 0.99 com os estacionamentos da PkLot, mostrando a capacidade de generalização do modelo treinado com dados reais. Os modelos treinados com dados sintéticos se mantiveram numa média de acurácia de 0.95, o que é um bom resultado, mesmo não alcançando a performance do modelo treinado com dados reais.
+Cada modelo foi treinado por 15 épocas utilizando o otimizador Adam, uma taxa de aprendizado de 0.0001 e um “batch size” de 32. Após as 15 épocas, o modelo que apresentou menor taxa de “loss” (Calculada por pela “Binary Crossentropy”) é escolhido e salvo. Cada modelo foi treinado e validado 3 vezes, e a média das 3 execuções é o resultado final. Para a classificação, o limiar de decisão é calculado de acordo com o Equal Error Rate no espaço ROC. Esses parâmetros foram escolhidos por meio de experimentação e foram os que apresentaram melhores resultados.
 
-\begin{table}[!htp] 
-\centering
-\caption{Resultados UFPR04}
-\label{tab:UFPR04}
-\begin{tabular}{|c|cccc|}
-\cline{1-5}
-\multicolumn{1}{|}{} & Conjunto Treino & Conjunto Teste & Acurácia & Loss \\
-\hline
-\texttt{} & UFPR04 & UFPR04 & \textbf{0.9973784685134888} & \textbf{0.00744111975654959} \\
-\texttt{} &  & UFPR05 & 0.992316206073761 & 0.026203461998701096 \\
-\texttt{} &  & PUCPR & 0.9913341999053955 & 0.03602888807654381 \\
-\texttt{} &  & CNRPark-A & 0.9787716865539551 & 0.07389025390148163 \\
-\texttt{} &  & CNRPark-B & 0.8300327658653259 & 0.7406405806541443 \\
-\hline
-\texttt{} & UFPR04 sintético randomizado & UFPR04 & 0.9643054008483887 & 0.17444078624248505 \\
-\texttt{} &  & UFPR05 & 0.947799563407898 & 0.2021385282278061 \\
-\texttt{} &  & PUCPR & \textbf{0.9684255123138428} & 0.14903266727924347 \\
-\texttt{} &  & CNRPark-A & 0.9554367065429688 & \textbf{0.11254721879959106} \\
-\texttt{} &  & CNRPark-B & 0.7871510982513428 & 0.4944949746131897 \\
-\hline
-\texttt{} & UFPR04 sintético fotorealista & UFPR04 & 0.9548830986022949 & 0.24915337562561035 \\
-\texttt{} &  & UFPR05 & 0.9618846774101257 & 0.22398780286312103 \\
-\texttt{} &  & PUCPR & \textbf{0.9699152708053589} & 0.2288242131471634 \\
-\texttt{} &  & CNRPark-A & 0.9530059695243835 & \textbf{0.1626977175474167} \\
-\texttt{} &  & CNRPark-B & 0.6970216631889343 & 0.5185118317604065 \\
-\hline
-\end{tabular}
+\section{Resultados}
+
+Os modelos treinados foram validados para cada subconjunto das bases de imagens reais. O resultado geral do modelo é calculado pela média aritmética entre entre os resultados das acurácias. A tabela {tab:tabela-resultados-1} e {tab:tabela-resultados-2} mostram as acurácias obtidas com os tipos de modelos M1, M2 e M3 treinados. Podemos ver que os melhores resultados foram alcançados pelos modelos treinado com imagens reais, com uma acurácia média de 96,9\% para a validação com os subconjuntos da PKLot e 94,6\% para a validação com os subconjuntos da CNRPark-EXT. Enquanto isso o modelo treinado somente com imagens sintéticas teve um resultado bem inferior na validação dos subconjuntos da PKlot, porém teve um resultado aproximado do modelo treinado com imagens reais, tratando da validação com os subconjuntos da CNRPark-EXT. Já o modelo onde o treinamento usou como base a mistura entre as imagens reais e um conjunto geral das imagens sintéticas não apresentou uma mudança significativa nos resultados. Isso pode se dar ao fato de haverem muitas imagens o que faz o modelo convergir para o mesmo resultado.
+
+\begin{table}[!htp] \footnotesize
+    \centering
+    \caption{Acuŕacias obtidas validando com os subconjuntos da PKLot os tipos de modelos M1, M2 e M3}
+    \label{tab:tabela-resultados-1}
+    \begin{tabular}{cccc}
+    \texttt{} &  & Treino &  \\
+    \cline{2-4}
+    \multicolumn{1}{c|}{Teste}& CNRPark-EXT Real & Somente Imagens sintéticas & CNRPark-EXT + imagens sintéticas da PKlot \\
+    \hline
+    \texttt{PKLot-UFPR04} & 0,94752605273849 & 0,772077511030488 & 0,942348572886255 \\
+    \hline
+    \texttt{PKLot-UFPR05} & 0,97867720240070 & 0,874697147912456 & 0,973924058268239 \\
+    \hline
+    \texttt{PKLot-PUCPR} & 0,980970700158485 & 0,788663980972271 & 0,982081751028743 \\
+    \hline
+    \texttt{Média} & \textbf{0,969057985099225} & \textbf{0,811812879971738} & \textbf{0,966118127394412} \\
+    \hline
+    \end{tabular}
 \end{table}
 
-As tabelas \ref{tab:UFPR05} e \ref{tab:PUCPR} mostram os resultados dos experimentos tendo como base os estacionamentos UFPR05 e PUCPR, respectivamente. Pode-se notar que os resultados da PUCPR são semelhantes aos da UFPR04 tanto para os dados reais como os conjuntos gerados sinteticamente, se mantendo numa acurácia de em média 0.98 com o modelo treinado com dados reais e 0.96 com o modelo treinado com dados sintéticos. Podemos notar também a boa capacidade de generalização, já que o modelo treinado apenas com o subconjunto PUCPR apresentou resultados muito bons em todos os outro, salvo CNRPark-B. Já os resultados com os modelos sintéticos da UFPR05 apresentaram resultados piores do que o geral, tendo uma média de acurácia de 0.75, mas mantevesse com resultados igualmente satisfatório aos outros, com relação ao modelo treinado com as imagens reais.
-
-\begin{table}[!htp] 
-\centering
-\caption{Resultados UFPR05}
-\label{tab:UFPR05}
-\begin{tabular}{|c|cccc|}
-\cline{1-5}
-\multicolumn{1}{|}{} & Conjunto Treino & Conjunto Teste & Acurácia & Loss \\
-\hline
-\texttt{} & UFPR05 & UFPR04 & 0.9930852651596069 & 0.02502281218767166 \\
-\texttt{} &  & UFPR05 & \textbf{0.9960375428199768} & \textbf{0.01266891323029995} \\
-\texttt{} &  & PUCPR & 0.9834603071212769 & 0.06736186891794205 \\
-\texttt{} &  & CNRPark-A & 0.9630529880523682 & 0.09921148419380188\\
-\texttt{} &  & CNRPark-B & 0.7893341779708862 & 0.8512572646141052 \\
-\hline
-\texttt{} & UFPR05 sintético randomizado & UFPR04 & 0.6991318464279175 & 0.67948979139328 \\
-\texttt{} &  & UFPR05 & 0.7014817595481873 & 0.6748328804969788 \\
-\texttt{} &  & PUCPR & 0.7480219006538391 & 0.6681806445121765 \\
-\texttt{} &  & CNRPark-A & \textbf{0.9649975895881653} & \textbf{0.14781269431114197} \\
-\texttt{} &  & CNRPark-B & 0.8379853367805481 & 0.4422059655189514 \\
-\hline
-\texttt{} & UFPR05 sintético fotorealista & UFPR04 & 0.7719458341598511 & 0.557625949382782 \\
-\texttt{} &  & UFPR05 & 0.8048615455627441 & 0.488942414522171\\
-\texttt{} &  & PUCPR & 0.8372944593429565 & 0.4830848276615143 \\
-\texttt{} &  & CNRPark-A & \textbf{0.9350186586380005} & \textbf{0.22728793323040009} \\
-\texttt{} &  & CNRPark-B & 0.7784188389778137 & 0.44967198371887207 \\
-\hline
-\end{tabular}
+\begin{table}[!htp] \footnotesize
+    \centering
+    \caption{Acuŕacias obtidas validando com os subconjuntos da CNRPark-EXT os tipos de modelos M1, M2 e M3}
+    \label{tab:tabela-resultados-2}
+    \begin{tabular}{cccc}
+    \texttt{} &  & Treino &  \\
+    \cline{2-4}
+    \multicolumn{1}{c|}{Teste}& PKLot Real & Somente Imagens sintéticas & PKLot + imagens sintéticas da CNRPark-EXT \\
+    \hline
+    \texttt{CNR-cam1} & 0,927117665679757 & 0,914231979591456 & 0,914623019198182 \\
+    \hline
+    \texttt{CNR-cam2} & 0,958979885057471 & 0,973922413793103 & 0,959410919540229 \\
+    \hline
+    \texttt{CNR-cam3} & 0,958506616257089 & 0,935601764335223 & 0,939193446754883 \\
+    \hline
+    \texttt{CNR-cam4} & 0,959827189586489 & 0,937141147206792 & 0,955824870485702 \\
+    \hline
+    \texttt{CNR-cam5} & 0,941338490389123 & 0,943301687763712 & 0,949953117674636 \\
+    \hline
+    \texttt{CNR-cam6} & 0,935086980920314 & 0,926613355780022 & 0,938959034792368 \\
+    \hline
+    \texttt{CNR-cam7} & 0,94483970136144 & 0,94312692138779 & 0,94770897379593 \\
+    \hline
+    \texttt{CNR-cam8} & 0,944815927873779 & 0,935975457049837 & 0,961244678186826 \\
+    \hline
+    \texttt{CNR-cam9} & 0,950823474831825 & 0,947483182556251 & 0,955277197865924 \\
+    \hline
+    \texttt{Média} & \textbf{0,946815103550810} & \textbf{0,939710878829354} & \textbf{0,946910584254965} \\
+    \hline
+    \end{tabular}
 \end{table}
 
-\begin{table}[!htp] 
-\centering
-\caption{Resultados PUCPR}
-\label{tab:PUCPR}
-\begin{tabular}{|c|cccc|}
-\cline{1-5}
-\multicolumn{1}{|}{} & Conjunto Treino & Conjunto Teste & Acurácia & Loss \\
-\hline
-\texttt{} & PUCPR & UFPR04 & 0.9933891892433167 & 0.01860688626766205\\
-\texttt{} &  & UFPR05 & 0.9871246814727783 & 0.04195189103484154 \\
-\texttt{} &  & PUCPR & \textbf{0.9986397624015808} & \textbf{0.00746541703119874} \\
-\texttt{} &  & CNRPark-A & 0.9763409495353699 & 0.05127578601241112 \\
-\texttt{} &  & CNRPark-B & 0.7165133357048035 & 1.0377250909805298 \\
-\hline
-\texttt{} & PUCPR sintético randomizado & UFPR04 & \textbf{0.9806804656982422} & \textbf{0.08626607060432434} \\
-\texttt{} &  & UFPR05 & 0.971541166305542 & 0.1300220787525177 \\
-\texttt{} &  & PUCPR & 0.9699800610542297 & 0.10714691877365112 \\
-\texttt{} &  & CNRPark-A & 0.9570571780204773 & 0.08663547039031982 \\
-\texttt{} &  & CNRPark-B & 0.8064868450164795 & 0.5178163051605225 \\
-\hline
-\end{tabular}
+A tabela \ref{tab:tabela-resultados-3} disponibiliza os resultados obtidos com os modelos treinados da mistura das imagens reais com as imagens sintéticas específicas de cada cenário. Podemos ver que na maioria dos casos alguma melhora na acurácia é notada, em no resultado geral pode-se ver uma melhora de cerca de 0,5\% em comparação aos resultados obtidos apenas com as imagens reais, explicitados nas tabelas \ref{tab:tabela-resultados-1} e \ref{tab:tabela-resultados-2}.
+
+\begin{table}[!htp] \footnotesize
+    \centering
+    \caption{Acuŕacias obtidas com os modelos treinados com imagens sintéticas de cenários específicos}
+    \label{tab:tabela-resultados-3}
+    \begin{tabular}{cc}
+    \texttt{Modelo}& Teste CNRPark-EXT Cenário específico \\
+    \hline
+    \texttt{PKLot + CNR-cam1 sintético} & 0,918160994847615 \\
+    \hline
+    \texttt{PKLot + CNR-cam2 sintético} & \textbf{0,972341954022988} \\
+    \hline
+    \texttt{PKLot + CNR-cam3 sintético} & 0,944316318035125 \\
+    \hline
+    \texttt{PKLot + CNR-cam4 sintético} & 0,960032920042673 \\
+    \hline
+    \texttt{PKLot + CNR-cam5 sintético} & \textbf{0,948898255825042} \\
+    \hline
+    \texttt{PKLot + CNR-cam6 sintético} & \textbf{0,946787317593892} \\
+    \hline
+    \texttt{PKLot + CNR-cam7 sintético} & 0,943587473392486 \\
+    \hline
+    \texttt{PKLot + CNR-cam8 sintético} & \textbf{0,961895817680941} \\
+    \hline
+    \texttt{PKLot + CNR-cam9 sintético} & \textbf{0,956692179044087} \\
+    \hline
+    \texttt{Média} & \textbf{0,950301470053872} \\
+    \hline
+    \hline
+    \texttt{Modelo}& Teste PKLot Cenário específico \\
+    \hline
+    \texttt{CNRPark-EXT + PKLot-UFPR04} & \textbf{0,959084052165313} \\
+    \hline
+    \texttt{CNRPark-EXT + PKLot-UFPR05} & \textbf{0,980392275135466} \\
+    \hline
+    \texttt{CNRPark-EXT + PKLot-PUCPR} & \textbf{0,983244661416283} \\
+    \hline
+    \texttt{Média} & \textbf{0,974240329572354} \\
+    \hline
+    \end{tabular}
 \end{table}
 
-Em geral, todos os testes tiveram resultados não tão satisfatórios quando testados no conjunto CNRPark-B. Isso pode ser causado devido os problemas desse conjunto, que envolvem uma má qualidade da imagem e considerável oclusão na maior parte das imagens. Também podemos dizer que a angulação da câmera não pareceu fazer tanta diferença nos resultados dos modelos treinados inteiramente com dados sintéticos, pois as melhores acurácias não corresponderam aso conjuntos de dados respectivos aos parâmetros do estacionamento estimado.
+\section{Análise dos resultados}
 
+O modelo base e o método de treinamento (“Transfer learning”) escolhido evidenciaram a boa capacidade de generalização do modelo e apresentaram resultados próximos e comparáveis a outros trabalhos no estado da arte que tratam desse mesmo problema. Assim, podemos ter uma boa base de comparação na avaliação do desempenho das imagens sintéticas de baixa fidelidade ao se utilizar os resultados obtidos com tipos de modelos M1 treinados. Pode-se concluir então:
+
+P1 - Qual o impacto das imagens sintéticas de baixa fidelidade na eficiência dos modelos estado da arte de classificação de vagas de estacionamento em cenários cruzados? Os tipos de modelo M3, em comparação com o M1 não apresentaram resultados satisfatórios, mantendo-se com resultados próximos ou inferiores. Esse resultado pode ser justificado pela quantidade de imagens sintéticas que são utilizadas nesse método, o que acaba generalizando mais o modelo e perdendo a capacidade de especificação do cenário que está sendo validado no momento, convergindo para o resultado obtido apenas com imagens reais. Já os modelos do tipo M4 apresentaram uma melhora no geral de 0,5\% em comparação com os modelos M1, sendo maiores que 1\% para alguns casos. Isso pode ter se dado pelo fato de os subconjuntos utilizados para o treinamento desses modelos possuírem menos imagens, e ao adicionar as imagens sintéticas específicas de um cenário às imagens reais o modelo acaba adquirindo a capacidade de especificação daquele cenário e não se confunde. Isso evidencia que os modelos do tipo M4 são a melhor abordagem para se resolver o problema de especificar o modelo para um cenário sem a necessidade de dados reais, e talvez possam apresentar resultados ainda melhores ao se utilizar de imagens sintéticas fotorealistas.
+
+P2 - É possível superar o estado da arte treinando os modelos somente com imagens sintéticas de baixa fidelidade? Não. As acurácias obtidas com os modelos de tipo M2 foram consideravelmente inferiores às obtidas com os modelos de tipo M1. Isso pode ter acontecido pois as imagens sintéticas de baixa fidelidade não apresentam características realistas o suficiente para se resolver o problema de classificação de vagas de estacionamento, como não reproduzir fielmente a qualidade da imagem e detalhes das condições climáticas e de iluminação. Talvez a melhor abordagem para a criação de um modelo somente com imagens sintéticas que possa competir com o estado da arte seja a descrita em \citet{objectPose}, que consiste em misturar imagens sintéticas altamente randomizadas com imagens sintéticas fotorealísticas.
 %=====================================================
